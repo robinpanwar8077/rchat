@@ -65,8 +65,30 @@ currentUser.uid&& getChats()
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
       if (res.exists()) {
-        await setDoc(doc(db, "chats", combinedId), { messages: [] });
+       
   
+        await updateDoc(doc(db, "userchats", currentUser.uid), {
+          [`${combinedId}.userinfo`]: {
+            uid: selectedUser.uid,
+            displayName: selectedUser.displayName,
+            photoURL:selectedUser.photoURL
+          },
+          [`${combinedId}.date`]: serverTimestamp(),
+        });
+      console.log("ok");
+        await updateDoc(doc(db, "userchats", selectedUser.uid), {
+          [`${combinedId}.userinfo`]: {
+            uid: currentUser.uid,
+            displayName: currentUser.displayName,
+            photoURL:currentUser.photoURL
+          },
+          [`${combinedId}.date`]: serverTimestamp(),
+        });
+        console.log("ok2");
+        setUser(null)
+        setUsername("")
+      }else{
+        await setDoc(doc(db, "chats", combinedId), { messages: [] });
         await updateDoc(doc(db, "userchats", currentUser.uid), {
           [`${combinedId}.userinfo`]: {
             uid: selectedUser.uid,
@@ -105,7 +127,7 @@ currentUser.uid&& getChats()
     <div className="overflow-y-auto  h-[calc(100vh-128px)] p-2">
       <div className="flex flex-col mr-4 ">
         <div className="flex bg-[#121212]   border-[#CCCFD0] border-[1px] items-center gap-2 px-4  text-sm py-2 m-2    rounded-lg  w-full">
-          <SearchIcon className="w-20 h-auto text-slate-500" />
+          <SearchIcon  onClick={handleSearch} className="w-20 h-auto text-slate-500" />
           <input
             type="text"
             className="w-full text-white outline-none bg-inherit"

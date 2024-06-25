@@ -102,8 +102,10 @@ const Register = () => {
           photoURL: profileImageUrl,
         });
       }
+      await result.user.reload();
+      
   
-     
+      
       await setDoc(doc(db, 'users', result.user.uid), {
         uid: result.user.uid,
         phoneNumber: result.user.phoneNumber,
