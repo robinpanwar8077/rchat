@@ -102,7 +102,7 @@ const Register = () => {
           photoURL: profileImageUrl,
         });
       }
-      await result.user.reload();
+     
       
   
       
@@ -112,6 +112,8 @@ const Register = () => {
         displayName: username,
         photoURL: profileImageUrl,
       });
+    await result.user.reload();
+
       await setDoc(doc(db, 'userchats', result.user.uid),{})
       navigate("/")
       console.log('User signed in and profile created successfully', result);
@@ -162,9 +164,11 @@ const Register = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
+        <lable className ="text-gray-400">Please upload profile image</lable>
             <input
               type="file"
               className="w-full px-4 py-2 mb-4 border rounded"
+            
               onChange={(e) => setProfileImage(e.target.files[0])}
             />
             <button
